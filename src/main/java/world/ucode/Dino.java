@@ -14,28 +14,45 @@ import javafx.util.Duration;
 
 
 public class Dino extends Pane {
-    public void go() throws Exception  {
-//        Image f_dino = new Image(new FileInputStream("/Users/asydoruk/T-Rex_JavaFX/src/main/resources/Dino-right-up.png"));
-        Image s_dino = new Image(new FileInputStream("/Users/asydoruk/T-Rex_JavaFX/src/main/resources/Dino-left-up.png"));
-        ImageView imv = new ImageView(s_dino);
-        Duration duration = Duration.millis(2500);
-        TranslateTransition transition = new TranslateTransition(duration, imv);
-        transition.setByY(1000);
-        transition.setByX(200);
-        transition.play();
+    public Point2D velocity;
+
+    public Dino(){
+        try {
+            Image f_dino = new Image(new FileInputStream("/Users/asydoruk/T-Rex_JavaFX/src/main/resources/Dino-right-up.png"));
+            Image s_dino = new Image(new FileInputStream("/Users/asydoruk/T-Rex_JavaFX/src/main/resources/Dino-left-up.png"));
+            ImageView imv_f_dino = new ImageView(f_dino);
+            ImageView imv_s_dino = new ImageView(s_dino);
+            velocity = new Point2D(0,0);
+            setTranslateY(350);
+            setTranslateX(50);
+            getChildren().addAll(imv_f_dino);
+        } catch (Exception e){
+            System.out.println("err");
+        }
     }
-//    public Point2D velocity new Point2D(0,0);
-//    Rectangle rect;
-//    public Dino() {
-//        rect = new Rectangle(20,20);
-//        velocity = new Point2D(0,0);
-//        setTranslateY(300);
-//        setTranslateX(100);
-//        getChildren().addAll(rect);
-//    }
 
-//    public void moveY(int value) {
-//        for(int i = 0; i < value; i++)
-//    }
+    public void moveY(int value) {
+        for(int i = 0; i < Math.abs(value); i++) {
+            for(Cactus w : Main.cacti) {
+                if(this.getBoundsInParent().intersects(w.getBoundsInParent())) {
+                    setTranslateY(getTranslateY() + 1);
+                }
+            }
+            setTranslateY(getTranslateY());
+        }
+    }
 
+    public void moveX(int value) {
+        for(int i = 0; i < value; i++) {
+            for(Cactus w : Main.cacti) {
+                if(getTranslateX()+w.width == w.getTranslateX())
+                    Main.score++;
+            }
+            setTranslateX(getTranslateX()+1);
+        }
+    }
+
+    public void jump() {
+        velocity = new Point2D(3, -15);
+    }
 }

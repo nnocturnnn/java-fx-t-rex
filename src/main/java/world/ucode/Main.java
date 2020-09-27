@@ -1,42 +1,85 @@
 package world.ucode;
 
 import java.io.FileInputStream;
+import java.util.ArrayList;
 
+import javafx.animation.AnimationTimer;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.Parent;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import java.util.Random;
 import javafx.util.Duration;
 
 public class Main extends Application {
+    public static Pane appRoot = new Pane();
+    public static Pane gameRoot = new Pane();
+
+    public static ArrayList<Cactus> cacti = new ArrayList<>();
+    Dino dino = new Dino();
+    public static int score = 0;
+    public Label scorelabel = new Label(String.valueOf(score));
+
     public static void main(String[] args)  {
         Application.launch(args);
     }
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        Image ground = new Image(new FileInputStream("/Users/asydoruk/T-Rex_JavaFX/src/main/resources/Ground.png"));
-        ImageView imv = new ImageView(ground);
-        imv.setY(350);
-        Group group = new Group();
-        Scene scene = new Scene(group, 900, 600);
-        group.getChildren().add(imv);
-        primaryStage.setTitle("dino");
-        Duration duration = Duration.millis(2500);
-        TranslateTransition transition = new TranslateTransition(duration, imvy);
-        transition.setAutoReverse(true);
-        transition.setByX(1000);
-        transition.play();
 
-        primaryStage.setScene(scene);
-        primaryStage.show();
+    public Parent createContent() {
+        gameRoot.setPrefSize(900,600);
 
+        for(int i = 0; i < 100; i++) {
+            int enter = (int)(Math.random()*5);
+            Cactus cactus = new Cactus(enter);
+            cactus.setTranslateX(i*350+900);
+            cactus.setTranslateY(350);
+            cacti.add(cactus);
+
+            gameRoot.getChildren().addAll(cactus);
+        }
+
+        gameRoot.getChildren().addAll(dino);
+        appRoot.getChildren().addAll(gameRoot);
+        return appRoot;
     }
 
     public void update() {
 
+//        if (dino.velocity.getY() < 5) {
+//            dino.velocity = dino.velocity.add(0,1);
+//        }
+
+        dino.moveX((int)dino.velocity.getX());
+        dino.moveY((int)dino.velocity.getY());
+        scorelabel.setText(String.valueOf(score));
+        dino.translateXProperty().addListener((ovs,old, newValue)-> {
+            int offset = newValue.intValue();
+            if (offset > 200)
+                gameRoot.setLayoutX(-(offset - 200));
+        });
     }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        Scene scene = new Scene(createContent());
+        scene.setOnMouseClicked(event->dino.jump());
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                update();
+            }
+        };
+        timer.start();
+
+    }
+
 }
