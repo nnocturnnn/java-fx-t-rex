@@ -1,7 +1,10 @@
 package world.ucode;
 
 import java.io.FileInputStream;
+
+import javafx.animation.Animation;
 import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.layout.Pane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,13 +22,26 @@ public class Dino extends Pane {
 
     public Dino(){
         try {
-            Image f_dino = new Image(new FileInputStream("/Users/asydoruk/hui/src/main/resources/Dino-right-up.png"));
-//            Image s_dino = new Image(new FileInputStream("/Users/asydoruk/hui/src/main/resources/Dino-left-up.png"));
-            ImageView imv_f_dino = new ImageView(f_dino);
+            Image IMAGE = new Image(new FileInputStream("/Users/asydoruk/hui/2x-trex.png"));
+            int COLUMNS  =   6;
+            int COUNT    =  1;
+            int OFFSET_X =  98;
+            int OFFSET_Y =  0;
+            int WIDTH    = 98;
+            int HEIGHT   = 94;
+            final ImageView imageView = new ImageView(IMAGE);
+            imageView.setViewport(new Rectangle2D(OFFSET_X, OFFSET_Y, WIDTH, HEIGHT));
+            final Animation animation = new SpriteAnimation(
+                    imageView,
+                    Duration.millis(500),
+                    COUNT, COLUMNS,
+                    OFFSET_X, OFFSET_Y,
+                    WIDTH, HEIGHT
+            );
+            animation.setCycleCount(Animation.INDEFINITE);
+            animation.play();
             setTranslateY(350);
-//            ImageView imv_s_dino = new ImageView(s_dino);
-            getChildren().addAll(imv_f_dino);
-//            getChildren().addAll(imv_s_dino);
+            getChildren().addAll(imageView);
         } catch (Exception e){
             System.out.println("err");
         }
