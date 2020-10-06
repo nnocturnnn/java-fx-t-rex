@@ -2,6 +2,7 @@ package world.ucode;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.io.FileInputStream;
 
 import javafx.animation.AnimationTimer;
 import javafx.animation.TranslateTransition;
@@ -37,10 +38,20 @@ public class Main extends Application {
         for(int i = 0; i < 100; i++) {
             int enter = (int)(Math.random()*5);
             Cactus cactus = new Cactus(enter);
-            cactus.setTranslateX(i*350+900);
+            cactus.setTranslateX(i*350+550);
             cactus.setTranslateY(350);
             cacti.add(cactus);
-
+            try {
+                Image backgroundImg = new Image(new FileInputStream("/Users/asydoruk/hui/src/main/resources/Ground.png"));
+                ImageView backgroundIV = new ImageView(backgroundImg);
+                backgroundIV.setTranslateY(380);
+                backgroundIV.setTranslateX(i*900);
+//                backgroundIV.setFitHeight(600);
+//                backgroundIV.setFitWidth(900);
+                gameRoot.getChildren().addAll(backgroundIV);
+            } catch(Exception e) {
+                System.out.println("err");
+            }
             gameRoot.getChildren().addAll(cactus);
         }
 
@@ -51,9 +62,23 @@ public class Main extends Application {
 
     public void update() {
 
-//        if (dino.velocity.getY() < 5) {
-//            dino.velocity = dino.velocity.add(0,1);
-//        }
+        if (dino.velocity.getY() < 350) {
+            dino.velocity = dino.velocity.add(0,1);
+            dino.setTranslateY(dino.getTranslateY()+3);
+            if (dino.velocity.getY() == 300) {
+                dino.jump = true;
+            }
+        }
+        if (dino.velocity.getX() % 2 == 0) {
+
+        }
+        if (dino.getTranslateY() > 350) {
+            dino.setTranslateY(350);
+        }
+
+
+//        dino.velocity.add(0.5,0);
+
 
         dino.moveX((int)dino.velocity.getX());
         dino.moveY((int)dino.velocity.getY());
@@ -68,7 +93,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Scene scene = new Scene(createContent());
-        scene.setOnMouseClicked(event->dino.jump());
+        scene.setOnMouseClicked(event -> dino.jump());
         primaryStage.setScene(scene);
         primaryStage.show();
 

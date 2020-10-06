@@ -17,7 +17,7 @@ public class Cactus extends Pane {
     public Cactus(int num)  {
         try {
             this.num = num;
-            String src = "/Users/asydoruk/T-Rex_JavaFX/src/main/resources/Cactus-" + String.valueOf(num) + ".png";
+            String src = "/Users/asydoruk/hui/src/main/resources/Cactus-" + String.valueOf(num) + ".png";
             Image cactus = new Image(new FileInputStream(src));
             ImageView iv_cactus = new ImageView(cactus);
             if (num == 1) {
