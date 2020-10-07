@@ -63,7 +63,7 @@ public class Main extends Application {
         }
 
         gameRoot.getChildren().addAll(dino);
-        appRoot.getChildren().addAll(gameRoot);
+        appRoot.getChildren().addAll(gameRoot,scorelabel);
         return appRoot;
     }
 
@@ -76,20 +76,15 @@ public class Main extends Application {
                 dino.jump = true;
             }
         }
-        if (dino.velocity.getX() % 2 == 0) {
-
-        }
         if (dino.getTranslateY() > 350) {
             dino.setTranslateY(350);
         }
-
-
-//        dino.velocity.add(0.5,0);
-
-
+        score++;
         dino.moveX((int)dino.velocity.getX());
         dino.moveY((int)dino.velocity.getY());
+        scorelabel.setStyle("-fx-font-family: Press Start 2P; -fx-font-size: 30px;");
         scorelabel.setText(String.valueOf(score));
+        scorelabel.setTranslateX(430);
         dino.translateXProperty().addListener((ovs,old, newValue)-> {
             int offset = newValue.intValue();
             if (offset > 200)

@@ -1,23 +1,16 @@
 package world.ucode;
 
 import java.io.FileInputStream;
-
 import javafx.animation.Animation;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.layout.Pane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import java.io.FileInputStream;
-import javafx.animation.TranslateTransition;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-//import
-
-
 
 public class Dino extends Pane {
-    public Point2D velocity = new Point2D(7,350);
+    public Point2D velocity ;
     public boolean jump = true;
 
     public Dino(){
@@ -40,6 +33,7 @@ public class Dino extends Pane {
             );
             animation.setCycleCount(Animation.INDEFINITE);
             animation.play();
+            velocity = new Point2D(7,350);
             setTranslateY(350);
             getChildren().addAll(imageView);
         } catch (Exception e){
@@ -50,7 +44,9 @@ public class Dino extends Pane {
     public void moveY(int value) {
         for(int i = 0; i < Math.abs(value); i++) {
             for(Cactus w : Main.cacti) {
-//                velocity = new Point2D(0, 10);
+                if (this.getBoundsInParent().intersects(w.getBoundsInParent())) {
+                    System.exit(1);
+                }
             }
             setTranslateY(getTranslateY());
         }
@@ -59,7 +55,9 @@ public class Dino extends Pane {
     public void moveX(int value) {
         for(int i = 0; i < value; i++) {
             for(Cactus w : Main.cacti) {
-
+                if (this.getBoundsInParent().intersects(w.getBoundsInParent())) {
+                    System.exit(1);
+                }
             }
             setTranslateX(getTranslateX()+0.5);
         }
@@ -68,7 +66,7 @@ public class Dino extends Pane {
     public void jump() {
         int y = 0;
         if (this.jump) {
-            while(y != 90) {
+            while(y != 110) {
                 velocity = velocity.add(0, -1);
                 setTranslateY(getTranslateY() - 1);
                 setTranslateX(getTranslateX() + 0.5);
