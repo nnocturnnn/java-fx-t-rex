@@ -43,5 +43,4 @@ public class Cactus extends Pane {
 
     }
 
-
 }

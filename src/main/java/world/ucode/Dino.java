@@ -24,11 +24,11 @@ public class Dino extends Pane {
         try {
             Image IMAGE = new Image(new FileInputStream("/Users/asydoruk/hui/2x-trex.png"));
             int COLUMNS  =   6;
-            int COUNT    =  1;
-            int OFFSET_X =  98;
+            int COUNT    =  2;
+            int OFFSET_X =  89;
             int OFFSET_Y =  0;
-            int WIDTH    = 98;
-            int HEIGHT   = 94;
+            int WIDTH    = 43;
+            int HEIGHT   = 47;
             final ImageView imageView = new ImageView(IMAGE);
             imageView.setViewport(new Rectangle2D(OFFSET_X, OFFSET_Y, WIDTH, HEIGHT));
             final Animation animation = new SpriteAnimation(
@@ -66,21 +66,14 @@ public class Dino extends Pane {
     }
 
     public void jump() {
+        int y = 0;
         if (this.jump) {
-            velocity = velocity.add(0, -40);
-            setTranslateY(getTranslateY() - 10);
-            setTranslateX(getTranslateX() + 5);
-            setTranslateY(getTranslateY() - 10);
-            setTranslateX(getTranslateX() + 5);
-            setTranslateY(getTranslateY() - 10);
-            setTranslateX(getTranslateX() + 5);
-            setTranslateY(getTranslateY() - 10);
-            setTranslateX(getTranslateX() + 5);
-            velocity = velocity.add(0, -40);
-            setTranslateY(getTranslateY() - 20);
-            setTranslateX(getTranslateX() + 10);
-            setTranslateY(getTranslateY() - 20);
-            setTranslateX(getTranslateX() + 10);
+            while(y != 90) {
+                velocity = velocity.add(0, -1);
+                setTranslateY(getTranslateY() - 1);
+                setTranslateX(getTranslateX() + 0.5);
+                y++;
+            }
             this.jump = false;
         }
     }

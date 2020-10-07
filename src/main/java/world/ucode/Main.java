@@ -12,6 +12,8 @@ import javafx.scene.Parent;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import java.util.HashMap;
+import javafx.scene.input.KeyCode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -23,6 +25,7 @@ public class Main extends Application {
     public static Pane appRoot = new Pane();
     public static Pane gameRoot = new Pane();
 
+    public static ArrayList<Cloud> clouds = new ArrayList<>();
     public static ArrayList<Cactus> cacti = new ArrayList<>();
     Dino dino = new Dino();
     public static int score = 0;
@@ -36,23 +39,27 @@ public class Main extends Application {
         gameRoot.setPrefSize(900,600);
 
         for(int i = 0; i < 100; i++) {
-            int enter = (int)(Math.random()*5);
-            Cactus cactus = new Cactus(enter);
+            int r_cactus = (int)(Math.random()*5);
+            int r_cloud = (int)(Math.random()*2);
+            Cactus cactus = new Cactus(r_cactus);
             cactus.setTranslateX(i*350+550);
             cactus.setTranslateY(350);
             cacti.add(cactus);
+            Cloud cloud = new Cloud(r_cloud);
+            cloud.setTranslateX(i*350+550);
+            cloud.setTranslateY(50);
+            clouds.add(cloud);
             try {
                 Image backgroundImg = new Image(new FileInputStream("/Users/asydoruk/hui/src/main/resources/Ground.png"));
                 ImageView backgroundIV = new ImageView(backgroundImg);
                 backgroundIV.setTranslateY(380);
                 backgroundIV.setTranslateX(i*900);
-//                backgroundIV.setFitHeight(600);
-//                backgroundIV.setFitWidth(900);
                 gameRoot.getChildren().addAll(backgroundIV);
             } catch(Exception e) {
                 System.out.println("err");
             }
             gameRoot.getChildren().addAll(cactus);
+            gameRoot.getChildren().addAll(cloud);
         }
 
         gameRoot.getChildren().addAll(dino);
@@ -65,7 +72,7 @@ public class Main extends Application {
         if (dino.velocity.getY() < 350) {
             dino.velocity = dino.velocity.add(0,1);
             dino.setTranslateY(dino.getTranslateY()+3);
-            if (dino.velocity.getY() == 300) {
+            if (dino.velocity.getY() == 275) {
                 dino.jump = true;
             }
         }
@@ -93,7 +100,11 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Scene scene = new Scene(createContent());
-        scene.setOnMouseClicked(event -> dino.jump());
+        scene.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.SPACE) {
+               dino.jump();
+            }
+        });
         primaryStage.setScene(scene);
         primaryStage.show();
 
