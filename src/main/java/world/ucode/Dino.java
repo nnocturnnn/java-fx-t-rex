@@ -65,6 +65,7 @@ public class Dino extends Pane {
 
     public void jump() {
         int y = 0;
+        velocity = velocity.add(1,0);
         if (this.jump) {
             while(y != 110) {
                 velocity = velocity.add(0, -1);
