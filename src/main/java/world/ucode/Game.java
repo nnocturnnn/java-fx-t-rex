@@ -25,9 +25,6 @@ public class Game  {
     public static int score = 0;
     public Label scorelabel = new Label(String.valueOf(score));
 
-//    public static void main(String[] args)  {
-//        Application.launch(args);
-//    }
     public Game(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.dino = new Dino(primaryStage);
@@ -76,7 +73,7 @@ public class Game  {
             }
         }
         score++;
-        if (score % 500 == 0) {
+        if (score % 100 == 0) {
             Utils.playSound("papam.mp3");
         }
         if (dino.getTranslateY() > 350) {   // ground

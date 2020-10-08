@@ -51,7 +51,8 @@ public class Dino extends Pane {
                 if (this.getBoundsInParent().intersects(w.getBoundsInParent()) && one) {
                     one = false;
                     Utils.playSound("dead.mp3");
-                    new EndMenu(primaryStage).start();
+                    primaryStage.close();
+                    new EndMenu().start();
                 }
             }
             setTranslateY(getTranslateY());
@@ -64,7 +65,8 @@ public class Dino extends Pane {
                 if (this.getBoundsInParent().intersects(w.getBoundsInParent()) && one) {
                     one = false;
                     Utils.playSound("dead.mp3");
-                    new EndMenu(primaryStage).start();
+                    primaryStage.close();
+                    new EndMenu().start();
                 }
             }
             setTranslateX(getTranslateX()+0.5);

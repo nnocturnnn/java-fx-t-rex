@@ -12,11 +12,10 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class EndMenu {
-    public Stage primaryStage;
+    public Stage primaryStage = new Stage();
     public Pane pane =  new Pane();
 
-    public EndMenu(Stage primaryStage) {
-        this.primaryStage = primaryStage;
+    public EndMenu() {
         this.init();
     }
 
