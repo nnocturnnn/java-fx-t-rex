@@ -7,13 +7,17 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.layout.Pane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Dino extends Pane {
     public Point2D velocity ;
     public boolean jump = true;
+    public Stage primaryStage;
+    protected boolean one = true;
 
-    public Dino(){
+    public Dino(Stage primaryStage){
+        this.primaryStage = primaryStage;
         try {
             Image IMAGE = new Image(new FileInputStream("/Users/asydoruk/hui/2x-trex.png"));
             int COLUMNS  =   6;
@@ -43,9 +47,10 @@ public class Dino extends Pane {
 
     public void moveY(int value) {
         for(int i = 0; i < Math.abs(value); i++) {
-            for(Cactus w : Main.cacti) {
-                if (this.getBoundsInParent().intersects(w.getBoundsInParent())) {
-                    System.exit(1);
+            for(Cactus w : Game.cacti) {
+                if (this.getBoundsInParent().intersects(w.getBoundsInParent()) && one) {
+                    one = false;
+                    new EndMenu(primaryStage).start();
                 }
             }
             setTranslateY(getTranslateY());
@@ -54,9 +59,10 @@ public class Dino extends Pane {
 
     public void moveX(int value) {
         for(int i = 0; i < value; i++) {
-            for(Cactus w : Main.cacti) {
-                if (this.getBoundsInParent().intersects(w.getBoundsInParent())) {
-                    System.exit(1);
+            for(Cactus w : Game.cacti) {
+                if (this.getBoundsInParent().intersects(w.getBoundsInParent()) && one) {
+                    one = false;
+                    new EndMenu(primaryStage).start();
                 }
             }
             setTranslateX(getTranslateX()+0.5);
@@ -65,7 +71,7 @@ public class Dino extends Pane {
 
     public void jump() {
         int y = 0;
-        velocity = velocity.add(1,0);
+        velocity = velocity.add(0,0);
         if (this.jump) {
             while(y != 110) {
                 velocity = velocity.add(0, -1);

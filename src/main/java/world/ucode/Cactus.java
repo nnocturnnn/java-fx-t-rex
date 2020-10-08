@@ -3,10 +3,6 @@ package world.ucode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-
-import java.io.FileInputStream;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import java.io.FileInputStream;
 
 public class Cactus extends Pane {
@@ -15,7 +11,6 @@ public class Cactus extends Pane {
     public int width;
 
     public Cactus(int num)  {
-        System.out.println(num);
         try {
             this.num = num;
             String src = "/Users/asydoruk/hui/src/main/resources/Cactus-" + String.valueOf(num) + ".png";
