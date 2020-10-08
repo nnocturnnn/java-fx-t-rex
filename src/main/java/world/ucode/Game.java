@@ -13,16 +13,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import java.io.File;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 
 public class Game  {
     public Stage primaryStage;
     public static Pane appRoot = new Pane();
     public static Pane gameRoot = new Pane();
-    Media sound=new Media(new File("Sound_22840.mp3").toURI().toString());
-    MediaPlayer mediaPlayer=new MediaPlayer(sound);
 
     public static ArrayList<Cloud> clouds = new ArrayList<>();
     public static ArrayList<Cactus> cacti = new ArrayList<>();
@@ -73,7 +68,6 @@ public class Game  {
     }
 
     public void update() {
-
         if (dino.velocity.getY() < 350) {
             dino.velocity = dino.velocity.add(0,1);  // gravity
             dino.setTranslateY(dino.getTranslateY()+3);
@@ -81,12 +75,12 @@ public class Game  {
                 dino.jump = true;
             }
         }
+        score++;
+        if (score % 500 == 0) {
+            Utils.playSound("papam.mp3");
+        }
         if (dino.getTranslateY() > 350) {   // ground
             dino.setTranslateY(350);
-        }
-        score++;
-        if (score % 100 == 0) {
-            mediaPlayer.play();
         }
         dino.moveX((int)dino.velocity.getX());
         dino.moveY((int)dino.velocity.getY());
@@ -102,6 +96,7 @@ public class Game  {
 
     public void start() {
         Scene scene = new Scene(createContent());
+        Utils.playSound("pip.mp3");
         scene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.SPACE) {
                dino.jump();
@@ -114,6 +109,9 @@ public class Game  {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
+                if (dino.one == false) {
+                    this.stop();
+                }
                 update();
             }
         };

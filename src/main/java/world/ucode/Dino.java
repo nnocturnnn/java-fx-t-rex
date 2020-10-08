@@ -50,6 +50,7 @@ public class Dino extends Pane {
             for(Cactus w : Game.cacti) {
                 if (this.getBoundsInParent().intersects(w.getBoundsInParent()) && one) {
                     one = false;
+                    Utils.playSound("dead.mp3");
                     new EndMenu(primaryStage).start();
                 }
             }
@@ -62,6 +63,7 @@ public class Dino extends Pane {
             for(Cactus w : Game.cacti) {
                 if (this.getBoundsInParent().intersects(w.getBoundsInParent()) && one) {
                     one = false;
+                    Utils.playSound("dead.mp3");
                     new EndMenu(primaryStage).start();
                 }
             }
@@ -72,6 +74,7 @@ public class Dino extends Pane {
     public void jump() {
         int y = 0;
         velocity = velocity.add(0,0);
+        Utils.playSound("pip.mp3");
         if (this.jump) {
             while(y != 110) {
                 velocity = velocity.add(0, -1);
