@@ -1,90 +1,92 @@
 package world.ucode;
 
-import java.io.FileInputStream;
-import javafx.animation.Animation;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.layout.Pane;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
+import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
-public class Dino extends Pane {
-    public Point2D velocity ;
-    public boolean jump = true;
-    public Stage primaryStage;
-    protected boolean one = true;
 
-    public Dino(Stage primaryStage){
-        this.primaryStage = primaryStage;
-        try {
-            Image IMAGE = new Image(new FileInputStream("/Users/asydoruk/hui/2x-trex.png"));
-            int COLUMNS  =   6;
-            int COUNT    =  2;
-            int OFFSET_X =  89;
-            int OFFSET_Y =  0;
-            int WIDTH    = 43;
-            int HEIGHT   = 47;
-            final ImageView imageView = new ImageView(IMAGE);
-            imageView.setViewport(new Rectangle2D(OFFSET_X, OFFSET_Y, WIDTH, HEIGHT));
-            final Animation animation = new SpriteAnimation(
-                    imageView,
-                    Duration.millis(500),
-                    COUNT, COLUMNS,
-                    OFFSET_X, OFFSET_Y,
-                    WIDTH, HEIGHT
-            );
-            animation.setCycleCount(Animation.INDEFINITE);
-            animation.play();
-            velocity = new Point2D(7,350);
-            setTranslateY(350);
-            getChildren().addAll(imageView);
-        } catch (Exception e){
-            System.out.println("err");
-        }
+public class Dino extends Pane{
+    ImageView imageView;
+    int count = 3;
+    int columns = 3;
+    int offsetX = 96;
+    int offsetY = 33;
+    int width = 16;
+    int height = 16;
+    public SpriteAnimation animation;
+    public Point2D dinoVelocity = new Point2D(0,0);
+    private boolean canJump = true;
+    public boolean one = true;
+
+    public Dino(Image Imv){
+        imageView = new ImageView(Imv);
+        imageView.setFitHeight(40);
+        imageView.setFitWidth(40);
+        imageView.setViewport(new Rectangle2D(offsetX,offsetY,width,height));
+        animation = new SpriteAnimation(this.imageView,Duration.millis(200),count,columns,offsetX,offsetY,width,height);
+        getChildren().addAll(this.imageView);
     }
 
-    public void moveY(int value) {
-        for(int i = 0; i < Math.abs(value); i++) {
-            for(Cactus w : Game.cacti) {
+    public void moveX(int value){
+        boolean movingRight = value > 0;
+        for(int i = 0; i<Math.abs(value); i++) {
+            for (Node texture : Game.textures) {
+                if(this.getBoundsInParent().intersects(texture.getBoundsInParent())) {
+                    if (movingRight) {
+                        if (this.getTranslateX() + Game.MARIO_SIZE == texture.getTranslateX()){
+                            this.setTranslateX(this.getTranslateX() - 1);
+                            return;
+                        }
+                    } else {
+                        if (this.getTranslateX() == texture.getTranslateX() + Game.BLOCK_SIZE) {
+                            this.setTranslateX(this.getTranslateX() + 1);
+                            return;
+                        }
+                    }
+                }
+            }
+            this.setTranslateX(this.getTranslateX() + (movingRight ? 1 : -1));
+        }
+    }
+    public void moveY(int value){
+        boolean movingDown = value >0;
+        for(int i = 0; i < Math.abs(value); i++){
+            for(Texture texture :Game.textures){
+                if(getBoundsInParent().intersects(texture.getBoundsInParent())){
+                    if(movingDown){
+                        if(this.getTranslateY()+ Game.MARIO_SIZE == texture.getTranslateY()){
+                            this.setTranslateY(this.getTranslateY()-1);
+                            canJump = true;
+                            return;
+                        }
+                    }
+                    else{
+                        if(this.getTranslateY() == texture.getTranslateY()+ Game.BLOCK_SIZE){
+                            this.setTranslateY(this.getTranslateY()+1);
+                            dinoVelocity = new Point2D(0,10);
+                            return;
+                        }
+                    }
+                }
+            }
+            for(Enemy w : Game.enemys) {
                 if (this.getBoundsInParent().intersects(w.getBoundsInParent()) && one) {
                     one = false;
                     Utils.playSound("dead.mp3");
-                    primaryStage.close();
-                    new EndMenu().start();
                 }
             }
-            setTranslateY(getTranslateY());
+            this.setTranslateY(this.getTranslateY() + (movingDown?1:-1));
         }
     }
-
-    public void moveX(int value) {
-        for(int i = 0; i < value; i++) {
-            for(Cactus w : Game.cacti) {
-                if (this.getBoundsInParent().intersects(w.getBoundsInParent()) && one) {
-                    one = false;
-                    Utils.playSound("dead.mp3");
-                    primaryStage.close();
-                    new EndMenu().start();
-                }
-            }
-            setTranslateX(getTranslateX()+0.5);
-        }
-    }
-
-    public void jump() {
-        int y = 0;
-        velocity = velocity.add(0,0);
-        Utils.playSound("pip.mp3");
-        if (this.jump) {
-            while(y != 110) {
-                velocity = velocity.add(0, -1);
-                setTranslateY(getTranslateY() - 1);
-                setTranslateX(getTranslateX() + 0.5);
-                y++;
-            }
-            this.jump = false;
+    public void jumpdino(){
+        if(canJump){
+            dinoVelocity = dinoVelocity.add(0,-30);
+            Utils.playSound("pip.mp3");
+            canJump = false;
         }
     }
 }

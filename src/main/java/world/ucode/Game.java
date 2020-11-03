@@ -1,89 +1,90 @@
 package world.ucode;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.Parent;
-import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.control.Button;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.scene.control.Label;
 
-public class Game  {
-    public Stage primaryStage;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class Game {
+    Stage primaryStage;
+    public static ArrayList<Enemy> enemys = new ArrayList<>();
+    public static ArrayList<Texture> textures = new ArrayList<>();
+    private HashMap<KeyCode,Boolean> keys = new HashMap<>();
+
+    public static int score = 0;
+    public static int style = 1;
+    public static String path = "sprites/" + String.valueOf(style) + ".png";
+    public Label scorelabel = new Label(String.valueOf(score));
+    public static final int BLOCK_SIZE = 45;
+    public static final int MARIO_SIZE = 40;
+
     public static Pane appRoot = new Pane();
     public static Pane gameRoot = new Pane();
 
-    public static ArrayList<Cloud> clouds = new ArrayList<>();
-    public static ArrayList<Cactus> cacti = new ArrayList<>();
-    Dino dino;
-    public static int score = 0;
-    public Label scorelabel = new Label(String.valueOf(score));
+    public Dino dino;
 
     public Game(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        this.dino = new Dino(primaryStage);
+        primaryStage.setScene(primaryStage.getScene());
+        this.creation();
     }
 
-    public Parent createContent() {
-        gameRoot.setPrefSize(900,600);
-
+    private void initContent(){
+        Image imv = new Image(path);
         for(int i = 0; i < 100; i++) {
-            int r_cactus = (int)(Math.random()*5);
-            int r_cloud = (int)(Math.random()*2);
-            Cactus cactus = new Cactus(r_cactus);
-            cactus.setTranslateX(i*350+550);
-            cactus.setTranslateY(350);
-            cacti.add(cactus);
-            Cloud cloud = new Cloud(r_cloud);
-            cloud.setTranslateX(i*350+550);
-            cloud.setTranslateY(50);
-            clouds.add(cloud);
-            try {
-                Image backgroundImg = new Image(new FileInputStream("/Users/asydoruk/hui/src/main/resources/Ground.png"));
-                ImageView backgroundIV = new ImageView(backgroundImg);
-                backgroundIV.setTranslateY(380);
-                backgroundIV.setTranslateX(i*900);
-                gameRoot.getChildren().addAll(backgroundIV);
-            } catch(Exception e) {
-                System.out.println("err");
-            }
-            gameRoot.getChildren().addAll(cactus);
-            gameRoot.getChildren().addAll(cloud);
+            Texture cloud = new Texture(imv,0,i*350+550,50); // можно поставить рандомный у
+            Texture ground = new Texture(imv,1,i*2400,350);
+            Enemy enemy = new Enemy(imv,i*350+550,280);
         }
-        appRoot.getStylesheets().add("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+        dino = new Dino(imv);
+        dino.setTranslateX(0);
+        dino.setTranslateY(300);
+        scorelabel.setTranslateX(400);
+        scorelabel.setTranslateY(120);
         scorelabel.setStyle("-fx-font-family: 'Press Start 2P'; -fx-font-size: 40px; -fx-text-fill: #535353;");
-        gameRoot.getChildren().addAll(dino);
-        appRoot.setStyle("-fx-background-color: linear-gradient(to bottom, #C0C0C0, #ffffff);");
+        gameRoot.getChildren().add(dino);
         appRoot.getChildren().addAll(gameRoot,scorelabel);
-        return appRoot;
     }
 
-    public void update() {
-        if (dino.velocity.getY() < 350) {
-            dino.velocity = dino.velocity.add(0,1);  // gravity
-            dino.setTranslateY(dino.getTranslateY()+3);
-            if (dino.velocity.getY() == 275) {
-                dino.jump = true;
-            }
-        }
+    public void score() {
         score++;
         if (score % 100 == 0) {
             Utils.playSound("papam.mp3");
         }
-        if (dino.getTranslateY() > 350) {   // ground
-            dino.setTranslateY(350);
-        }
-        dino.moveX((int)dino.velocity.getX());
-        dino.moveY((int)dino.velocity.getY());
         scorelabel.setText(String.valueOf(score));
-        scorelabel.setTranslateX(400);
-        scorelabel.setTranslateY(120);
+    }
+
+    public void start() {
+        Pane new_Root = appRoot;
+        primaryStage.setScene(new Scene(new_Root,900,600));
+        appRoot.getStylesheets().add("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+        appRoot.setStyle("-fx-background-color: linear-gradient(to bottom, #C0C0C0, #ffffff);");
+        primaryStage.centerOnScreen();
+    }
+
+    private void update(){
+        if(isPressed(KeyCode.SPACE) && dino.getTranslateY()>=5){
+            dino.jumpdino();
+        }
+        score();
+        dino.setScaleX(1);
+        dino.moveX(5);
+        if(dino.dinoVelocity.getY()<10){
+           dino.dinoVelocity = dino.dinoVelocity.add(0,1);
+        }
+        dino.moveY((int)dino.dinoVelocity.getY());
         dino.translateXProperty().addListener((ovs,old, newValue)-> {  // move map
             int offset = newValue.intValue();
             if (offset > 200)
@@ -91,29 +92,50 @@ public class Game  {
         });
     }
 
-    public void start() {
-        Scene scene = new Scene(createContent());
-        Utils.playSound("pip.mp3");
-        scene.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.SPACE) {
-               dino.jump();
+    public Button startBtn() {
+        ImageView retryIm = new ImageView(new Image(path));
+        retryIm.setViewport(new Rectangle2D(0, 0, 70, 65));
+        Button retry = new Button("Retry", retryIm);
+        retry.setLayoutY(220);
+        retry.setLayoutX(370);
+        retry.setStyle("-fx-font-family: 'Press Start 2P'; -fx-background-color: transparent; -fx-min-width: 170; -fx-min-height: 25; -fx-text-fill: #535353; -fx-font-size: 20;");
+        retry.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent event) {
+                score = 0;
+                appRoot.getChildren().clear();
+                gameRoot.getChildren().clear();
+                gameRoot.setLayoutX(0);
+                new Game(primaryStage).start();
             }
         });
-        primaryStage.setScene(scene);
-        primaryStage.centerOnScreen();
-        primaryStage.show();
 
+        return retry;
+    }
+
+    private boolean isPressed(KeyCode key){
+        return keys.getOrDefault(key,false);
+    }
+    public void creation() {
+        initContent();
+        Utils.playSound("pip.mp3");
+        // Scene scene = new Scene(appRoot,900,600);
+        primaryStage.getScene().setOnKeyPressed(event-> keys.put(event.getCode(), true));
+        primaryStage.getScene().setOnKeyReleased(event -> {
+            keys.put(event.getCode(), false);
+             dino.animation.stop();
+        });
+        // primaryStage.setScene(scene);
+        // primaryStage.show();
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 if (dino.one == false) {
+                    appRoot.getChildren().addAll(startBtn());
                     this.stop();
                 }
                 update();
             }
         };
         timer.start();
-
     }
-
 }

@@ -5,15 +5,12 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-
 public class Main extends Application {
 
-//    @Override
     public void start(Stage primaryStage) {
         Pane pane = new Pane();
-//        primaryStage.setScene(new MainBasicWindow(pane).create());
         primaryStage.setTitle("dino");
-        primaryStage.getIcons().add(new Image("Dino-stand.png"));
+        primaryStage.getIcons().add(new Image("sprites/Dino-stand.png"));
         primaryStage.setResizable(false);
         primaryStage.centerOnScreen();
         primaryStage.show();
