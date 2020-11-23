@@ -22,6 +22,7 @@ public class Game {
     public static ArrayList<Enemy> enemys = new ArrayList<>();
     public static ArrayList<Texture> textures = new ArrayList<>();
     private HashMap<KeyCode,Boolean> keys = new HashMap<>();
+    public ArrayList<String> scores = new ArrayList<>();
     public String path;
     public static int score = 0;
     public static int sound;
@@ -37,6 +38,7 @@ public class Game {
     public Game(Stage primaryStage,int style, int sound, String name) {
         this.style = style;
         this.sound = sound;
+        this.name = name;
         this.primaryStage = primaryStage;
         primaryStage.setScene(primaryStage.getScene());
         this.creation();

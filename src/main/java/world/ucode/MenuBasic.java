@@ -17,11 +17,11 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 public class MenuBasic {
+    TextField textField;
     public Stage mainMenu;
     public Pane pane;
     public int sound = 0;
     public int style = 1;
-    public String name;
     
     public MenuBasic(Pane pane, Stage mainMenu) {
         this.pane = pane;
@@ -63,7 +63,7 @@ public class MenuBasic {
         startBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                new Game(mainMenu,style,sound,name).start();
+                new Game(mainMenu,style,sound,textField.getText()).start();
             }
         });
 
@@ -71,14 +71,16 @@ public class MenuBasic {
     }
 
     public TextField nameF() {
-        TextField textField = new TextField();
+        textField = new TextField();
+        textField.setLayoutX(470);
+        textField.setLayoutY(200);
         return textField;
     }
 
     public Button resultsBtn() {
         Button ResultsBtn = new Button();
 
-        ResultsBtn.setText("Results");
+        ResultsBtn.setText("Name : ");
         ResultsBtn.setLayoutX(350);
         ResultsBtn.setLayoutY(200);
         ResultsBtn.setStyle("-fx-font-family: 'Press Start 2P'; -fx-background-color: transparent; -fx-min-width: 170; -fx-min-height: 25; -fx-text-fill: #535353; -fx-font-size: 20;");
