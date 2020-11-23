@@ -22,11 +22,11 @@ public class Game {
     public static ArrayList<Enemy> enemys = new ArrayList<>();
     public static ArrayList<Texture> textures = new ArrayList<>();
     private HashMap<KeyCode,Boolean> keys = new HashMap<>();
-    public ArrayList<String> score = new ArrayList<>();
     public String path;
     public static int score = 0;
     public static int sound;
     public static int style;
+    public static String name;
     public Label scorelabel = new Label(String.valueOf(score));
 
     public static Pane appRoot = new Pane();
@@ -34,7 +34,7 @@ public class Game {
 
     public Dino dino;
 
-    public Game(Stage primaryStage,int style, int sound) {
+    public Game(Stage primaryStage,int style, int sound, String name) {
         this.style = style;
         this.sound = sound;
         this.primaryStage = primaryStage;
@@ -107,7 +107,7 @@ public class Game {
                 appRoot.getChildren().clear();
                 gameRoot.getChildren().clear();
                 gameRoot.setLayoutX(0);
-                new Game(primaryStage,style,sound).start();
+                new Game(primaryStage,style,sound,name).start();
             }
         });
 

@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import java.io.File;
+import javafx.scene.control.TextField;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -62,13 +63,17 @@ public class MenuBasic {
         startBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                new Game(mainMenu,style,sound).start();
+                new Game(mainMenu,style,sound,name).start();
             }
         });
 
         return startBtn;
     }
 
+    public TextField nameF() {
+        TextField textField = new TextField();
+        return textField;
+    }
 
     public Button resultsBtn() {
         Button ResultsBtn = new Button();
@@ -177,6 +182,7 @@ public class MenuBasic {
         this.pane.getChildren().add(this.settingBtn());
         this.pane.getChildren().add(this.dinoImgView());
         this.pane.getChildren().add(this.groundImgView());
+        this.pane.getChildren().add(this.nameF());
         Scene scene = new Scene(pane);
         pane.setPrefSize(900,600);
         mainMenu.setScene(scene);
