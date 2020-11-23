@@ -24,7 +24,7 @@ public class Game {
     private HashMap<KeyCode,Boolean> keys = new HashMap<>();
 
     public static int score = 0;
-    public static int style = 1;
+    public static int style = 6;
     public static String path = "sprites/" + String.valueOf(style) + ".png";
     public Label scorelabel = new Label(String.valueOf(score));
     public static final int BLOCK_SIZE = 45;
@@ -46,11 +46,11 @@ public class Game {
         for(int i = 0; i < 100; i++) {
             Texture cloud = new Texture(imv,0,i*350+550,50); // можно поставить рандомный у
             Texture ground = new Texture(imv,1,i*2400,350);
-            Enemy enemy = new Enemy(imv,i*350+550,280);
+            Enemy enemy = new Enemy(imv,i*350+550,305,this.style);
         }
-        dino = new Dino(imv);
+        dino = new Dino(imv,this.style);
         dino.setTranslateX(0);
-        dino.setTranslateY(300);
+        dino.setTranslateY(200);
         scorelabel.setTranslateX(400);
         scorelabel.setTranslateY(120);
         scorelabel.setStyle("-fx-font-family: 'Press Start 2P'; -fx-font-size: 40px; -fx-text-fill: #535353;");

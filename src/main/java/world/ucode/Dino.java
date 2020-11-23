@@ -2,6 +2,7 @@ package world.ucode;
 
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
+import javafx.animation.Animation;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -11,23 +12,25 @@ import javafx.util.Duration;
 
 public class Dino extends Pane{
     ImageView imageView;
-    int count = 3;
+    int count = 2;
     int columns = 3;
-    int offsetX = 96;
-    int offsetY = 33;
-    int width = 16;
-    int height = 16;
+    int offsetX = 1855;
+    int offsetY = 0;
+    int width = 87;
+    int height = 95;
     public SpriteAnimation animation;
     public Point2D dinoVelocity = new Point2D(0,0);
     private boolean canJump = true;
     public boolean one = true;
 
-    public Dino(Image Imv){
+    public Dino(Image Imv, int style){
         imageView = new ImageView(Imv);
-        imageView.setFitHeight(40);
-        imageView.setFitWidth(40);
+        imageView.setFitHeight(47);
+        imageView.setFitWidth(51);
         imageView.setViewport(new Rectangle2D(offsetX,offsetY,width,height));
         animation = new SpriteAnimation(this.imageView,Duration.millis(200),count,columns,offsetX,offsetY,width,height);
+        animation.setCycleCount(Animation.INDEFINITE);
+        animation.play();
         getChildren().addAll(this.imageView);
     }
 
