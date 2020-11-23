@@ -22,6 +22,7 @@ public class Game {
     public static ArrayList<Enemy> enemys = new ArrayList<>();
     public static ArrayList<Texture> textures = new ArrayList<>();
     private HashMap<KeyCode,Boolean> keys = new HashMap<>();
+    public ArrayList<String> score = new ArrayList<>();
     public String path;
     public static int score = 0;
     public static int sound;

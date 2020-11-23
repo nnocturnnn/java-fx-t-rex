@@ -20,6 +20,7 @@ public class MenuBasic {
     public Pane pane;
     public int sound = 0;
     public int style = 1;
+    public String name;
     
     public MenuBasic(Pane pane, Stage mainMenu) {
         this.pane = pane;
