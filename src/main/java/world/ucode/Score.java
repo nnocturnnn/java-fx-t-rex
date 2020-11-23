@@ -1,11 +1,11 @@
 package world.ucode;
 
-public class Product {
+public class Score {
 
     public String name;
     public int score;
  
-    public Product(String name, int score) {
+    public Score(String name, int score) {
         this.name = name;
         this.score = score;
     }

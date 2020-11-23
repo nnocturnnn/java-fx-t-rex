@@ -21,12 +21,12 @@ public class DbHandler {
         this.connection = DriverManager.getConnection(CON_STR);
     }
  
-    public List<Product> getAllProducts() {
+    public List<Score> getAllProducts() {
         try (Statement statement = this.connection.createStatement()) {
-            List<Product> products = new ArrayList<Product>();
+            List<Score> products = new ArrayList<Score>();
             ResultSet resultSet = statement.executeQuery("SELECT name, score FROM products ORDER BY score");
             while (resultSet.next()) {
-                products.add(new Product(resultSet.getString("name"), resultSet.getInt("score"));
+                products.add(new Score(resultSet.getString("name"), resultSet.getInt("score")));
             }
             return products;
  
