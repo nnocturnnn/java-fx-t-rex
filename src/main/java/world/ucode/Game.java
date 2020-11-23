@@ -24,7 +24,7 @@ public class Game {
     private HashMap<KeyCode,Boolean> keys = new HashMap<>();
 
     public static int score = 0;
-    public static int style = 6;
+    public static int style = 2;
     public static String path = "sprites/" + String.valueOf(style) + ".png";
     public Label scorelabel = new Label(String.valueOf(score));
     public static final int BLOCK_SIZE = 45;

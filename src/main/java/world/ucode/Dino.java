@@ -2,6 +2,7 @@ package world.ucode;
 
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.shape.Rectangle;
 import javafx.animation.Animation;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -12,6 +13,7 @@ import javafx.util.Duration;
 
 public class Dino extends Pane{
     ImageView imageView;
+    Rectangle rect;
     int count = 2;
     int columns = 3;
     int offsetX = 1855;
@@ -23,8 +25,21 @@ public class Dino extends Pane{
     private boolean canJump = true;
     public boolean one = true;
 
+    // public void check_style(int style) {
+    //     if (style == 2) {
+            
+    //     } else if (style == 3) {
+           
+    //     } else if (style == 4) {
+           
+    //     } else if (style == 5) {
+            
+    //     } else if (style == 6) {
+    //     }
+    // }
     public Dino(Image Imv, int style){
         imageView = new ImageView(Imv);
+        check_style(style);
         imageView.setFitHeight(47);
         imageView.setFitWidth(51);
         imageView.setViewport(new Rectangle2D(offsetX,offsetY,width,height));
@@ -40,15 +55,23 @@ public class Dino extends Pane{
             for (Node texture : Game.textures) {
                 if(this.getBoundsInParent().intersects(texture.getBoundsInParent())) {
                     if (movingRight) {
-                        if (this.getTranslateX() + Game.MARIO_SIZE == texture.getTranslateX()){
+                        if (this.getTranslateX() == texture.getTranslateX()){
                             this.setTranslateX(this.getTranslateX() - 1);
                             return;
                         }
                     } else {
-                        if (this.getTranslateX() == texture.getTranslateX() + Game.BLOCK_SIZE) {
+                        if (this.getTranslateX() == texture.getTranslateX()) {
                             this.setTranslateX(this.getTranslateX() + 1);
                             return;
                         }
+                    }
+                }
+            }
+            for(Enemy w : Game.enemys) {
+                if (w.getBoundsInParent().getWidth() != 105.0) {
+                    if (this.getBoundsInParent().intersects(w.getBoundsInParent()) && one) {
+                        one = false;
+                        Utils.playSound("dead.mp3");
                     }
                 }
             }
@@ -61,25 +84,19 @@ public class Dino extends Pane{
             for(Texture texture :Game.textures){
                 if(getBoundsInParent().intersects(texture.getBoundsInParent())){
                     if(movingDown){
-                        if(this.getTranslateY()+ Game.MARIO_SIZE == texture.getTranslateY()){
+                        if(this.getTranslateY() + 30 == texture.getTranslateY()){
                             this.setTranslateY(this.getTranslateY()-1);
                             canJump = true;
                             return;
                         }
                     }
                     else{
-                        if(this.getTranslateY() == texture.getTranslateY()+ Game.BLOCK_SIZE){
+                        if(this.getTranslateY() == texture.getTranslateY()){
                             this.setTranslateY(this.getTranslateY()+1);
                             dinoVelocity = new Point2D(0,10);
                             return;
                         }
                     }
-                }
-            }
-            for(Enemy w : Game.enemys) {
-                if (this.getBoundsInParent().intersects(w.getBoundsInParent()) && one) {
-                    one = false;
-                    Utils.playSound("dead.mp3");
                 }
             }
             this.setTranslateY(this.getTranslateY() + (movingDown?1:-1));
