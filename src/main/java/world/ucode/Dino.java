@@ -14,6 +14,7 @@ import javafx.util.Duration;
 public class Dino extends Pane{
     ImageView imageView;
     Rectangle rect;
+    int dif = 1;
     int count = 2;
     int columns = 3;
     int offsetX = 1855;
@@ -25,21 +26,10 @@ public class Dino extends Pane{
     private boolean canJump = true;
     public boolean one = true;
 
-    // public void check_style(int style) {
-    //     if (style == 2) {
-            
-    //     } else if (style == 3) {
-           
-    //     } else if (style == 4) {
-           
-    //     } else if (style == 5) {
-            
-    //     } else if (style == 6) {
-    //     }
-    // }
     public Dino(Image Imv, int style){
         imageView = new ImageView(Imv);
-        check_style(style);
+        if (style > 1)
+            offsetX = 1515;
         imageView.setFitHeight(47);
         imageView.setFitWidth(51);
         imageView.setViewport(new Rectangle2D(offsetX,offsetY,width,height));
@@ -75,7 +65,13 @@ public class Dino extends Pane{
                     }
                 }
             }
-            this.setTranslateX(this.getTranslateX() + (movingRight ? 1 : -1));
+            if (Game.score < 500) {
+                this.setTranslateX(this.getTranslateX() + (movingRight ? 1 : -1));
+            } else if (Game.score > 500) {
+                this.setTranslateX(this.getTranslateX() + (movingRight ? 1.5 : -1));
+            } else if (Game.score > 1000) {
+                this.setTranslateX(this.getTranslateX() + (movingRight ? 2 : -1));
+            }
         }
     }
     public void moveY(int value){
@@ -87,6 +83,7 @@ public class Dino extends Pane{
                         if(this.getTranslateY() + 30 == texture.getTranslateY()){
                             this.setTranslateY(this.getTranslateY()-1);
                             canJump = true;
+                            animation.play();
                             return;
                         }
                     }

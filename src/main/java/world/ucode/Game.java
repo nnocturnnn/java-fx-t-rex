@@ -22,26 +22,27 @@ public class Game {
     public static ArrayList<Enemy> enemys = new ArrayList<>();
     public static ArrayList<Texture> textures = new ArrayList<>();
     private HashMap<KeyCode,Boolean> keys = new HashMap<>();
-
+    public String path;
     public static int score = 0;
-    public static int style = 2;
-    public static String path = "sprites/" + String.valueOf(style) + ".png";
+    public static int sound;
+    public static int style;
     public Label scorelabel = new Label(String.valueOf(score));
-    public static final int BLOCK_SIZE = 45;
-    public static final int MARIO_SIZE = 40;
 
     public static Pane appRoot = new Pane();
     public static Pane gameRoot = new Pane();
 
     public Dino dino;
 
-    public Game(Stage primaryStage) {
+    public Game(Stage primaryStage,int style, int sound) {
+        this.style = style;
+        this.sound = sound;
         this.primaryStage = primaryStage;
         primaryStage.setScene(primaryStage.getScene());
         this.creation();
     }
 
     private void initContent(){
+        path = "sprites/" + String.valueOf(style) + ".png";
         Image imv = new Image(path);
         for(int i = 0; i < 100; i++) {
             Texture cloud = new Texture(imv,0,i*350+550,50); // можно поставить рандомный у
@@ -105,7 +106,7 @@ public class Game {
                 appRoot.getChildren().clear();
                 gameRoot.getChildren().clear();
                 gameRoot.setLayoutX(0);
-                new Game(primaryStage).start();
+                new Game(primaryStage,style,sound).start();
             }
         });
 
@@ -118,14 +119,11 @@ public class Game {
     public void creation() {
         initContent();
         Utils.playSound("pip.mp3");
-        // Scene scene = new Scene(appRoot,900,600);
         primaryStage.getScene().setOnKeyPressed(event-> keys.put(event.getCode(), true));
         primaryStage.getScene().setOnKeyReleased(event -> {
             keys.put(event.getCode(), false);
              dino.animation.stop();
         });
-        // primaryStage.setScene(scene);
-        // primaryStage.show();
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {

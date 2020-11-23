@@ -18,7 +18,9 @@ import javafx.scene.media.MediaPlayer;
 public class MenuBasic {
     public Stage mainMenu;
     public Pane pane;
-
+    public int sound = 0;
+    public int style = 1;
+    
     public MenuBasic(Pane pane, Stage mainMenu) {
         this.pane = pane;
         this.mainMenu = mainMenu;
@@ -59,7 +61,7 @@ public class MenuBasic {
         startBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                new Game(mainMenu).start();
+                new Game(mainMenu,style,sound).start();
             }
         });
 
@@ -88,7 +90,7 @@ public class MenuBasic {
     public Button skinBtn() {
         Button skinBtn = new Button();
     
-        skinBtn.setText("Skin");
+        skinBtn.setText("Skin: 1");
         skinBtn.setLayoutX(350);
         skinBtn.setLayoutY(250);
         skinBtn.setStyle("-fx-font-family: 'Press Start 2P'; -fx-background-color: transparent; -fx-min-width: 170; -fx-min-height: 25; -fx-text-fill: #535353; -fx-font-size: 20;");
@@ -96,7 +98,25 @@ public class MenuBasic {
         skinBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("Results");
+                if (style == 1) {
+                    skinBtn.setText("Skin: 2");
+                    style = 2;
+                } else if (style == 2) {
+                    skinBtn.setText("Skin: 3");
+                    style = 3;
+                } else if (style == 3) {
+                    skinBtn.setText("Skin: 4");
+                    style = 4;
+                } else if (style == 4) {
+                    skinBtn.setText("Skin: 5");
+                    style = 5;
+                } else if (style == 5) {
+                    skinBtn.setText("Skin: 6");
+                    style = 6;
+                } else if (style == 6) {
+                    skinBtn.setText("Skin: 1");
+                    style = 1;
+                }
             }
         });
     
@@ -105,7 +125,7 @@ public class MenuBasic {
 
     public Button settingBtn() {
         Button settingBtn = new Button();
-    
+
         settingBtn.setText("Sound : on");
         settingBtn.setLayoutX(350);
         settingBtn.setLayoutY(300);
@@ -114,7 +134,13 @@ public class MenuBasic {
         settingBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                settingBtn.setText("Sound : off");
+                if (sound == 0) {
+                    settingBtn.setText("Sound : on");
+                    sound = 1;
+                } else if (sound == 1) {
+                    settingBtn.setText("Sound : off");
+                    sound = 0;
+                }
             }
         });
     
