@@ -22,8 +22,10 @@ public class MenuBasic {
     public Pane pane;
     public int sound = 0;
     public int style = 1;
+    public DbHandler dbHandler;
     
     public MenuBasic(Pane pane, Stage mainMenu) {
+        dbHandler = DbHandler.getInstance();
         this.pane = pane;
         this.mainMenu = mainMenu;
         this.init();
@@ -88,7 +90,10 @@ public class MenuBasic {
         ResultsBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("Results");
+                List<Product> products = dbHandler.getAllProducts();
+                for (Product product : products) {
+                    System.out.println(product.toString());
+                }
             }
         });
 

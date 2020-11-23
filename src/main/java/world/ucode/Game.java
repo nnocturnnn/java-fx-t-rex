@@ -32,7 +32,7 @@ public class Game {
 
     public static Pane appRoot = new Pane();
     public static Pane gameRoot = new Pane();
-
+    DbHandler dbHandler;
     public Dino dino;
 
     public Game(Stage primaryStage,int style, int sound, String name) {
