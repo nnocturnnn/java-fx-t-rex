@@ -20,12 +20,10 @@ public class MenuBasic {
     TextField textField;
     public Stage mainMenu;
     public Pane pane;
-    public int sound = 0;
+    public int sound = 1;
     public int style = 1;
-    public DbHandler dbHandler;
     
     public MenuBasic(Pane pane, Stage mainMenu) {
-        dbHandler = DbHandler.getInstance();
         this.pane = pane;
         this.mainMenu = mainMenu;
         this.init();
@@ -90,10 +88,7 @@ public class MenuBasic {
         ResultsBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                List<Product> products = dbHandler.getAllProducts();
-                for (Product product : products) {
-                    System.out.println(product.toString());
-                }
+                System.out.println("Results");
             }
         });
 

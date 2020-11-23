@@ -32,7 +32,6 @@ public class Game {
 
     public static Pane appRoot = new Pane();
     public static Pane gameRoot = new Pane();
-    DbHandler dbHandler;
     public Dino dino;
 
     public Game(Stage primaryStage,int style, int sound, String name) {
@@ -65,7 +64,8 @@ public class Game {
     public void score() {
         score++;
         if (score % 100 == 0) {
-            Utils.playSound("papam.mp3");
+            if (sound == 1)
+                Utils.playSound("papam.mp3");
         }
         scorelabel.setText(String.valueOf(score));
     }
@@ -116,12 +116,31 @@ public class Game {
         return retry;
     }
 
+    public Button resBtn() {
+        Button resBtn = new Button();
+        resBtn.setText("Result");
+        resBtn.setLayoutX(370);
+        resBtn.setLayoutY(300);
+        resBtn.setStyle("-fx-font-family: 'Press Start 2P'; -fx-background-color: transparent; -fx-min-width: 170; -fx-min-height: 25; -fx-text-fill: #535353; -fx-font-size: 20;");
+        resBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                for (String str : scores) {
+                    System.out.println(str);
+                }
+            }
+        });
+
+        return resBtn;
+    }
+
     private boolean isPressed(KeyCode key){
         return keys.getOrDefault(key,false);
     }
     public void creation() {
         initContent();
-        Utils.playSound("pip.mp3");
+        if (sound == 1)
+            Utils.playSound("pip.mp3");
         primaryStage.getScene().setOnKeyPressed(event-> keys.put(event.getCode(), true));
         primaryStage.getScene().setOnKeyReleased(event -> {
             keys.put(event.getCode(), false);
@@ -131,7 +150,8 @@ public class Game {
             @Override
             public void handle(long now) {
                 if (dino.one == false) {
-                    appRoot.getChildren().addAll(startBtn());
+                    scores.add(name + " : " + String.valueOf(score));
+                    appRoot.getChildren().addAll(startBtn(),resBtn());
                     this.stop();
                 }
                 update();

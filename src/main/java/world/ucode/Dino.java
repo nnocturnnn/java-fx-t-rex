@@ -61,8 +61,8 @@ public class Dino extends Pane{
                 if (w.getBoundsInParent().getWidth() != 105.0) {
                     if (this.getBoundsInParent().intersects(w.getBoundsInParent()) && one) {
                         one = false;
-                        Utils.playSound("dead.mp3");
-                        MenuBasic.dbHandler.addProduct(new Product(Game.name, Game.score));
+                        if (Game.sound == 1)
+                            Utils.playSound("dead.mp3");
                     }
                 }
             }
